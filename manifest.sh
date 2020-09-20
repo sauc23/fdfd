@@ -1,6 +1,8 @@
 #!/bin/ash
 
-echo "${TOKEN}" | docker login -u "${USERNAME}" --password-stdin "${REGISTRY}"
+echo "${TOKEN}" | docker login -u "${USERNAME}" --password-stdin ${REGISTRY}
+
+echo "${USERNAME}/${REGISTRY_IMAGE}"
 
 docker manifest create \
   "${USERNAME}/${REGISTRY_IMAGE}:${1}" \
