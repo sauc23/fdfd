@@ -11,7 +11,7 @@ variables:
   DOCKER_CLI_EXPERIMENTAL: enabled
   BUILDX_VER: 0.4.1
 
-build:
+.build-template:
   stage: build
   services:
     - name: docker:dind
@@ -20,6 +20,7 @@ build:
     - apk add --no-cache git
     - git fetch
     - git worktree add src master
+    - mv entrypoint.sh src
     - mkdir -p $HOME/.docker/cli-plugins/
     - wget -O $HOME/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v${BUILDX_VER}/buildx-v${BUILDX_VER}.linux-amd64
     - chmod a+x $HOME/.docker/cli-plugins/docker-buildx
@@ -28,6 +29,25 @@ build:
     - docker buildx create --use --name builder
     - docker buildx inspect --bootstrap builder
   script:
-    - docker buildx build --cache-to=type=local,dest=cache,mode=max --platform linux/amd64,linux/arm64,linux/arm/v7 -t ${REGISTRY_IMAGE}:latest -t ${REGISTRY_IMAGE}:$(git rev-parse origin/master | cut -c -7) .
+    - docker buildx build --cache-to=type=local,dest=cache,mode=max --platform linux/${ARCH} -t ${REGISTRY_IMAGE}:${ARCH} .
     - echo ${TOKEN} | docker login -u ${USERNAME} --password-stdin ${REGISTRY}
-    - docker buildx build --push --cache-from=type=local,src=cache --platform linux/amd64,linux/arm64,linux/arm/v7 -t ${REGISTRY_IMAGE}:latest -t ${REGISTRY_IMAGE}:$(git rev-parse origin/master | cut -c -7) .
+    - docker buildx build --push --cache-from=type=local,src=cache --platform linux/${ARCH} -t ${REGISTRY_IMAGE}:${ARCH} .
+
+build:amd64:
+  extends: .build-template
+  variables:
+    ARCH: amd64
+build:arm/v7:
+  extends: .build-template
+  variables:
+    ARCH: arm/v7
+build:arm64:
+  extends: .build-template
+  variables:
+    ARCH: arm64
+
+deploy:
+  stage: deploy
+  script:
+    - echo ${TOKEN} | docker login -u ${USERNAME} --password-stdin ${REGISTRY}
+    - ./manifest.sh $(git rev-parse origin/master | cut -c -7)
