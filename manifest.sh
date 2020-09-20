@@ -5,7 +5,7 @@ docker manifest create \
   -a ${USERNAME}/${REGISTRY_IMAGE}:amd64 \
   -a ${USERNAME}/${REGISTRY_IMAGE}:armv7 \
   -a ${USERNAME}/${REGISTRY_IMAGE}:arm64
-docker ${USERNAME}/${REGISTRY_IMAGE}:latest
+docker manifest push ${USERNAME}/${REGISTRY_IMAGE}:latest
 
 docker manifest create \
   ${USERNAME}/${REGISTRY_IMAGE}:${1} \
