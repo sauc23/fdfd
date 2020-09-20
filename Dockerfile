@@ -1,6 +1,6 @@
 FROM node:lts-alpine AS builder
 WORKDIR /home/node/
-COPY . .
+COPY src .
 RUN apk add python3 build-base && npm install
 
 FROM node:lts-alpine
