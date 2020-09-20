@@ -1,4 +1,4 @@
-![](https://images.microbadger.com/badges/version/jarylc/bittorrent-tracker.svg) ![](https://images.microbadger.com/badges/image/jarylc/snapdrop.svg) ![](https://img.shields.io/docker/stars/jarylc/bittorrent-tracker.svg) ![](https://img.shields.io/docker/pulls/jarylc/bittorrent-tracker.svg)
+![](https://images.microbadger.com/badges/version/jarylc/bittorrent-tracker.svg) ![](https://images.microbadger.com/badges/image/jarylc/bittorrent-tracker.svg) ![](https://img.shields.io/docker/stars/jarylc/bittorrent-tracker.svg) ![](https://img.shields.io/docker/pulls/jarylc/bittorrent-tracker.svg)
 
 # Environment variables:
 | Environment | Default value | Description
