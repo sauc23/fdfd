@@ -2,18 +2,16 @@
 
 echo "${TOKEN}" | docker login -u "${USERNAME}" --password-stdin ${REGISTRY}
 
-echo "${USERNAME}/${REGISTRY_IMAGE}"
+docker manifest create \
+  "${REGISTRY_IMAGE}:${1}" \
+  -a "${REGISTRY_IMAGE}:amd64" \
+  -a "${REGISTRY_IMAGE}/:armv7" \
+  -a "${REGISTRY_IMAGE}:arm64"
+docker manifest push "${REGISTRY_IMAGE}:${1}"
 
 docker manifest create \
-  "${USERNAME}/${REGISTRY_IMAGE}:${1}" \
-  -a "${USERNAME}/${REGISTRY_IMAGE}:amd64" \
-  -a "${USERNAME}/${REGISTRY_IMAGE}:armv7" \
-  -a "${USERNAME}/${REGISTRY_IMAGE}:arm64"
-docker manifest push "${USERNAME}/${REGISTRY_IMAGE}:${1}"
-
-docker manifest create \
-  "${USERNAME}/${REGISTRY_IMAGE}:latest" \
-  -a "${USERNAME}/${REGISTRY_IMAGE}:amd64" \
-  -a "${USERNAME}/${REGISTRY_IMAGE}:armv7" \
-  -a "${USERNAME}/${REGISTRY_IMAGE}:arm64"
-docker manifest push "${USERNAME}/${REGISTRY_IMAGE}:latest"
+  "${REGISTRY_IMAGE}:latest" \
+  -a "${REGISTRY_IMAGE}:amd64" \
+  -a "${REGISTRY_IMAGE}:armv7" \
+  -a "${REGISTRY_IMAGE}:arm64"
+docker manifest push "${REGISTRY_IMAGE}:latest"
