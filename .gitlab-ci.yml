@@ -54,6 +54,6 @@ deploy:
       command: [ "--experimental" ]
   before_script:
     - apk add --no-cache git
+    - git fetch
   script:
-    - echo ${TOKEN} | docker login -u ${USERNAME} --password-stdin ${REGISTRY}
     - ./manifest.sh $(git rev-parse origin/master | cut -c -7)
