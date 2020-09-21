@@ -10,7 +10,7 @@
 | STATS | 1 | Enable stats on '/stats' and '/stats.json' endpoints |
 | INTERVAL | 600000 | Client announce interval (ms) |
 | TRUST_PROXY | 0 | Trust 'x-forwarded-for' header from reverse proxy |
-| QUIET | 0 | Show only errors |
+| QUIET | 1 | Show only errors |
 | SILENT | 0 | Show no output at all (overrides QUIET) |
 
 # Deploying
@@ -18,7 +18,6 @@
 ```bash
 docker run -d \
     --name bittorrent-tracker \
-    --user nobody \
     -e PORT=8000 \
     -e HTTP=1 \
     -e UDP=1 \
@@ -26,7 +25,7 @@ docker run -d \
     -e STATS=1 \
     -e INTERVAL=600000 \
     -e TRUST_PROXY=0 \
-    -e QUIET=0 \
+    -e QUIET=1 \
     -e SILENT=0 \
     -p 8000:8000 \
     --restart unless-stopped \
@@ -46,7 +45,7 @@ bittorrent-tracker:
         - STATS=1
         - INTERVAL=600000
         - TRUST_PROXY=0
-        - QUIET=0
+        - QUIET=1
         - SILENT=0
     restart: unless-stopped
 ```
