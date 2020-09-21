@@ -16,5 +16,5 @@ p=$p"--stats $([[ ${STATS:-1} -eq 1 ]] && echo true || echo false) "
 p=$p"--interval ${INTERVAL:-600000} "
 p=$p"-p ${PORT:-8000}"
 
-set -v
+echo "Parameters: ${p}"
 NODE_ENV="production" bin/cmd.js ${p}
