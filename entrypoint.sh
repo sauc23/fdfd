@@ -7,7 +7,7 @@ p=""
 [[ "${UDP:-1}" -eq 1 ]] && p=$p'--udp '
 [[ "${WS:-1}" -eq 1 ]] && p=$p'--ws '
 if [[ "${SILENT:-0}" -eq 0 ]]; then
-  [[ "${QUIET:-0}" -eq 1 ]] && p=$p'-q '
+  [[ "${QUIET:-1}" -eq 1 ]] && p=$p'-q '
 else
   p=$p'-s '
 fi
