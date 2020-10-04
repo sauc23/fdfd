@@ -1,10 +1,12 @@
-FROM node:lts-alpine AS builder
+FROM alpine AS builder
 WORKDIR /home/node/
-RUN apk add python3 build-base
 COPY src .
-RUN npm install
+RUN apk add yarn python3 build-base && \
+    yarn install --production && \
+    rm -r .git .npmignore package*
 
-FROM node:lts-alpine
+FROM alpine
+RUN apk add nodejs
 WORKDIR /home/node/
 COPY --from=builder /home/node/ .
 ENTRYPOINT ["/home/node/entrypoint.sh"]
