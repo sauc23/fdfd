@@ -6,7 +6,7 @@ RUN apk add yarn python3 build-base && \
     rm -r .git .npmignore package*
 
 FROM alpine
-RUN apk add nodejs
+RUN apk add npm
 WORKDIR /home/node/
 COPY --from=builder /home/node/ .
 ENTRYPOINT ["/home/node/entrypoint.sh"]

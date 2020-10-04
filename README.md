@@ -38,7 +38,7 @@ bittorrent-tracker:
     ports:
         - "8000:8000"
     environment:
-        - PORT=3000
+        - PORT=8000
         - HTTP=1
         - UDP=1
         - WS=1
