@@ -10,7 +10,6 @@ variables:
   DOCKER_DRIVER: overlay2
   DOCKER_BUILDKIT: 1
   DOCKER_CLI_EXPERIMENTAL: enabled
-  BUILDX_VER: 0.4.2
 
 .build-template:
   stage: build
