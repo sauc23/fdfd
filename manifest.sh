@@ -8,10 +8,22 @@ docker manifest create \
   -a "${REGISTRY_IMAGE}:armv7" \
   -a "${REGISTRY_IMAGE}:arm64"
 docker manifest push "${REGISTRY_IMAGE}:${1}"
-
 docker manifest create \
   "${REGISTRY_IMAGE}:latest" \
   -a "${REGISTRY_IMAGE}:amd64" \
   -a "${REGISTRY_IMAGE}:armv7" \
   -a "${REGISTRY_IMAGE}:arm64"
 docker manifest push "${REGISTRY_IMAGE}:latest"
+
+docker manifest create \
+  "${REGISTRY_IMAGE2}:${1}" \
+  -a "${REGISTRY_IMAGE}:amd64" \
+  -a "${REGISTRY_IMAGE}:armv7" \
+  -a "${REGISTRY_IMAGE}:arm64"
+docker manifest push "${REGISTRY_IMAGE2}:${1}"
+docker manifest create \
+  "${REGISTRY_IMAGE2}:latest" \
+  -a "${REGISTRY_IMAGE}:amd64" \
+  -a "${REGISTRY_IMAGE}:armv7" \
+  -a "${REGISTRY_IMAGE}:arm64"
+docker manifest push "${REGISTRY_IMAGE2}:latest"
