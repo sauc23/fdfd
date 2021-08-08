@@ -16,6 +16,6 @@ docker buildx create --use --name builder
 docker buildx inspect --bootstrap builder
 docker buildx install
 
-docker buildx build --cache-to=type=local,dest=cache,mode=max --platform "linux/${ARCH}" -t "${REGISTRY_IMAGE}:${ARCH/\//}" .
+docker buildx build --cache-to=type=local,dest=cache,mode=max --build-arg VERSION --platform "linux/${ARCH}" -t "${REGISTRY_IMAGE}:${ARCH/\//}" .
 echo "${TOKEN}" | docker login -u "${USERNAME}" --password-stdin ${REGISTRY}
-docker buildx build --push --cache-from=type=local,src=cache --platform "linux/${ARCH}" -t "${REGISTRY_IMAGE}:${ARCH/\//}" .
+docker buildx build --push --cache-from=type=local,src=cache --build-arg VERSION --platform "linux/${ARCH}" -t "${REGISTRY_IMAGE}:${ARCH/\//}" .
