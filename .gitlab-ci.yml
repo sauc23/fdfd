@@ -5,6 +5,7 @@ workflow:
 image: docker
 
 stages:
+  - check
   - build
   - deploy
 
