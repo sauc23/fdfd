@@ -3,7 +3,8 @@ FROM alpine AS builder
 ARG VERSION
 
 WORKDIR /home/node/
-RUN apk add git npm python3 build-base && \
+RUN sed -i 's/https\:\/\/dl-cdn.alpinelinux.org/https\:\/\/ewr.edge.kernel.org/g' /etc/apk/repositories && \
+    apk add git npm python3 build-base && \
     git clone --depth 1 --branch ${VERSION} https://github.com/webtorrent/bittorrent-tracker.git . && \
     rm -rf .git \
            .github \
