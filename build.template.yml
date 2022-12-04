@@ -32,10 +32,14 @@ build:arm/v7:
   extends: .build-template
   variables:
     ARCH: arm/v7
+  tags:
+    - arm
 build:arm64:
   extends: .build-template
   variables:
     ARCH: arm64
+  tags:
+    - arm
 
 deploy:
   stage: deploy
