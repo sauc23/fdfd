@@ -6,64 +6,30 @@ image: docker
 
 stages:
   - check
-  - build
-  - deploy
+  - decide
 
 cache:
-  key: ${CI_COMMIT_REF_NAME}
+  key: btt_${CI_COMMIT_REF_NAME}
   paths:
     - EXISTING
-
-variables:
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_TLS_CERTDIR: ""
-  DOCKER_DRIVER: overlay2
-  DOCKER_BUILDKIT: 1
-  DOCKER_CLI_EXPERIMENTAL: enabled
 
 check:
   stage: check
   image: alpine
   artifacts:
     paths:
-      - LATEST
+      - build.yml
     expire_in: 3 hours
   before_script:
     - apk add bash
+    - mv noop.template.yml build.yml
   script:
     - ./check.sh
 
-.build-template:
-  stage: build
-  services:
-    - name: docker:dind
-      command: ["--experimental"]
-  script:
-    - "[[ ! -f 'LATEST' ]] && exit 0"
-    - VERSION=$(cat LATEST) ./build.sh
-
-build:amd64:
-  extends: .build-template
-  variables:
-    ARCH: amd64
-build:arm/v7:
-  extends: .build-template
-  variables:
-    ARCH: arm/v7
-build:arm64:
-  extends: .build-template
-  variables:
-    ARCH: arm64
-
-deploy:
-  stage: deploy
-  services:
-    - name: docker:dind
-      command: [ "--experimental" ]
-  script:
-    - "[[ ! -f 'LATEST' ]] && exit 0"
-    - LATEST=$(cat LATEST)
-    - LATEST=${LATEST/v/}
-    - ./manifest.sh "${LATEST}"
-  after_script:
-    - mv LATEST EXISTING
+decide:
+  stage: decide
+  trigger:
+    include:
+      - artifact: build.yml
+        job: check
+    strategy: depend

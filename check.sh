@@ -16,6 +16,8 @@ else
 fi
 
 if [[ (-n "${LATEST}" && "${LATEST}" != "${EXISTING}") ]]; then
-  echo "${LATEST}" > LATEST
+  mv build.template.yml build.yml
+  sed -i "s \$LATEST ${LATEST} g" 'build.yml'
+
   echo "Building..."
 fi

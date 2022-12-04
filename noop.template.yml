@@ -1,0 +1,4 @@
+noop:
+  stage: build
+  script:
+      - exit 0

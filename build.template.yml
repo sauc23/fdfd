@@ -1,0 +1,48 @@
+image: docker
+
+stages:
+  - build
+  - deploy
+
+cache:
+  key: btt_${CI_COMMIT_REF_NAME}
+  paths:
+    - EXISTING
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_DRIVER: overlay2
+  DOCKER_BUILDKIT: 1
+  DOCKER_CLI_EXPERIMENTAL: enabled
+
+.build-template:
+  stage: build
+  services:
+    - name: docker:dind
+      command: ["--experimental"]
+  script:
+    - VERSION=$LATEST ./build.sh
+
+build:amd64:
+  extends: .build-template
+  variables:
+    ARCH: amd64
+build:arm/v7:
+  extends: .build-template
+  variables:
+    ARCH: arm/v7
+build:arm64:
+  extends: .build-template
+  variables:
+    ARCH: arm64
+
+deploy:
+  stage: deploy
+  services:
+    - name: docker:dind
+      command: [ "--experimental" ]
+  script:
+    - ./manifest.sh $(echo '$LATEST' | sed 's/v//g')
+  after_script:
+    - echo '$LATEST' > EXISTING
